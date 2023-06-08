@@ -2,22 +2,22 @@ name: Build and Release
 
 on:
   push:
-    # tags:
-      # - 'v*'
+    tags:
+      - 'v*'
 
 jobs:
   build:
     name: Build
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [windows-latest, ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: '3.x'
 
@@ -27,13 +27,20 @@ jobs:
         pip install requests cloudscraper pyinstaller
 
     - name: Build binary
-      run: pyinstaller --onefile --hidden-import=cloudscraper request_url.py
+      run: |
+        if [ "${{ matrix.os }}" = "windows-latest" ]; then
+          pyinstaller --onefile --hidden-import=cloudscraper -n cloudscraper-cli-win cloudscraper-cli.py
+        elif [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+          pyinstaller --onefile --hidden-import=cloudscraper -n cloudscraper-cli-linux cloudscraper-cli.py
+        elif [ "${{ matrix.os }}" = "macos-latest" ]; then
+          pyinstaller --onefile --hidden-import=cloudscraper -n cloudscraper-cli-mac cloudscraper-cli.py
+        fi
 
     - name: Upload binary
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
-        name: request_url-${{ matrix.os }}
-        path: dist/request_url*
+        name: cloudscraper-cli-${{ matrix.os }}
+        path: dist/cloudscraper-cli*
         retention-days: 5
 
   release:
@@ -41,14 +48,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code again
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install hub
       run: |
         sudo snap install hub --classic
 
     - name: Download binaries
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         path: artifacts
 
@@ -58,4 +65,4 @@ jobs:
       run: |
         ls
         VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
-        hub release create -m "v0.0.2" -a artifacts/request_url-macos-latest/* v0.0.2
+        hub release create -m "$VERSION" -a artifacts/cloudscraper-cli-macos-latest/* -a artifacts/cloudscraper-cli-windows-latest/* -a artifacts/cloudscraper-cli-ubuntu-latest/* $VERSION
