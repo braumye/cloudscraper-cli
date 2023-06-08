@@ -24,10 +24,10 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests pyinstaller
+        pip install requests cloudscraper pyinstaller
 
     - name: Build binary
-      run: pyinstaller --onefile request_url.py
+      run: pyinstaller --onefile --hidden-import=cloudscraper request_url.py
 
     - name: Upload binary
       uses: actions/upload-artifact@v2
