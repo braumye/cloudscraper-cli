@@ -40,17 +40,17 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Download binaries
-      uses: actions/download-artifact@v2
-      with:
-        path: artifacts
+    - name: Checkout code again
+      uses: actions/checkout@v2
 
     - name: Install hub
       run: |
         sudo snap install hub --classic
 
-    - name: Checkout code again
-      uses: actions/checkout@v2
+    - name: Download binaries
+      uses: actions/download-artifact@v2
+      with:
+        path: artifacts
 
     - name: Create GitHub Release
       env:
@@ -58,4 +58,4 @@ jobs:
       run: |
         VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
         echo $VERSION
-        hub release create -m "Release v0.0.1" -a /home/runner/work/cloudscraper-cli/cloudscraper-cli/artifacts/request_url-macos-latest v0.0.1
+        hub release create -m "Release v0.0.1" -a artifacts/request_url-macos-latest v0.0.1
