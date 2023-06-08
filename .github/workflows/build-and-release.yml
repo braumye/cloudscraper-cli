@@ -54,7 +54,7 @@ jobs:
 
     - name: Create GitHub Release
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
         ls
         VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
