@@ -27,6 +27,7 @@ jobs:
         pip install requests cloudscraper pyinstaller
 
     - name: Build binary
+      shell: bash
       run: |
         if [ "${{ matrix.os }}" = "windows-latest" ]; then
           pyinstaller --onefile --hidden-import=cloudscraper -n cloudscraper-cli-win cloudscraper-cli.py
