@@ -58,4 +58,4 @@ jobs:
       run: |
         VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
         echo $VERSION
-        hub release create -m "Release v0.0.1" -a artifacts/request_url-macos-latest v0.0.1
+        hub release create -m "Release v0.0.1" -a /home/runner/work/cloudscraper-cli/cloudscraper-cli/artifacts/request_url-macos-latest v0.0.1
