@@ -58,4 +58,4 @@ jobs:
       run: |
         ls
         VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
-        hub release create -m "Release v0.0.1" -a artifacts/request_url-macos-latest/* v0.0.1
+        hub release create -m "v0.0.2" -a artifacts/request_url-macos-latest/* v0.0.2
