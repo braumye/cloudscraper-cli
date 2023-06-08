@@ -10,7 +10,7 @@ jobs:
     name: Build
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout code
@@ -58,4 +58,4 @@ jobs:
       run: |
         VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
         echo $VERSION
-        hub release create -m "Release $VERSION" -a artifacts/request_url-windows-latest -a artifacts/request_url-ubuntu-latest -a artifacts/request_url-macos-latest $VERSION
+        hub release create -m "Release $VERSION" -a artifacts/* $VERSION
