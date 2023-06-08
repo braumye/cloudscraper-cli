@@ -56,6 +56,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        ls
         VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
-        echo $VERSION
-        hub release create -m "Release v0.0.1" -a artifacts/request_url-macos-latest v0.0.1
+        hub release create -m "Release v0.0.1" -a artifacts/request_url-macos-latest/* v0.0.1
