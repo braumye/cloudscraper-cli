@@ -34,6 +34,7 @@ jobs:
       with:
         name: request_url-${{ matrix.os }}
         path: dist/request_url*
+        retention-days: 5
 
   release:
     needs: build
@@ -41,6 +42,8 @@ jobs:
     steps:
     - name: Download binaries
       uses: actions/download-artifact@v2
+      with:
+        path: artifacts
 
     - name: Install hub
       run: |
@@ -53,5 +56,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        ls -l
+        ls -l artifacts
         VERSION=$(echo $GITHUB_REF | cut -d / -f 3)
-        hub release create -m "Release $VERSION" -a request_url-windows-latest/* -a request_url-ubuntu-latest/* -a request_url-macos-latest/* $VERSION
+        hub release create -m "Release $VERSION" -a artifacts/request_url-windows-latest/* -a artifacts/request_url-ubuntu-latest/* -a artifacts/request_url-macos-latest/* $VERSION
