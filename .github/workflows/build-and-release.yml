@@ -46,6 +46,9 @@ jobs:
       run: |
         sudo snap install hub --classic
 
+    - name: Checkout code again
+      uses: actions/checkout@v2
+
     - name: Create GitHub Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
